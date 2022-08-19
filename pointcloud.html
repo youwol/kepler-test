@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Testing Kepler</title>
+    <script src='/devs/workspace/packages/dataframe/dist/@youwol/dataframe.js'></script>
+    <script src='/devs/workspace/packages/math/dist/@youwol/math.js'></script>
+    <script src='/devs/workspace/packages/geometry/dist/@youwol/geometry.js'></script>
+    <script src='/devs/workspace/packages/io/dist/@youwol/io.js'></script>
+    <script src='/devs/workspace/packages/three-extra/node_modules/three/build/three.min.js'></script>
+    <script src='/devs/workspace/packages/three-extra/node_modules/three/examples/js/controls/TrackballControls.js'></script>
+    <script src='/devs/workspace/packages/three-extra/dist/@youwol/three-extra.js'></script>
+    <script src='/devs/workspace/packages/kepler/dist/@youwol/kepler.js'></script>    
+    <script src="https://kit.fontawesome.com/daa834e337.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="js/style.css">
+</head>
+<body>
+    <div class="loading" id="js-loader">
+        <div class="loader"></div>
+    </div>
+    <div class='home-container'>
+        <span>
+            <div class='buttonIcon'>
+                <div id='goHome'><i class='fa fa-home'></i></div>
+            </div>
+            <div class='buttonIcon'>
+                <div id='saveHome'><i class='fa fa-clinic-medical'></i></div>
+            </div>
+            <div class='right-container'>
+                <div id='orientCubeWrapper'></div>
+            </div>
+        </span>
+    </div>
+
+    <script type="text/javascript" src='./js/doSurfaces.js'></script>
+    <script type="text/javascript" src='./js/doLines.js'></script>
+    <script type="text/javascript" src='./js/doPointset.js'></script>
+    <script type="text/javascript" src='./js/postInit.js'></script>
+    <script type="text/javascript" src='./js/utils.js'></script>
+    <script type="text/javascript" src='./js/init.js'></script>
+
+    <script>
+        const three     = globalThis['THREE']        
+        const dataframe = globalThis['@youwol/dataframe']
+        const math      = globalThis['@youwol/math']
+        const geom      = globalThis['@youwol/geometry']
+        const io        = globalThis['@youwol/io']
+        const extra     = globalThis['@youwol/three-extra']
+        const kepler    = globalThis['@youwol/kepler']
+
+        const model = {
+            grid: false
+        }
+
+        const surfaceset = [
+            {
+                url: ['/data/sandbox/mw.ts'],
+                show: true,
+                attr: 'cost',
+                lut: 'Insar',
+                duplicateLut: 1,
+                reverseLut: false,
+                surface: {
+                    show: false,
+                    color: '#aaaaaa',
+                    flat: false,
+                    creaseAngle: 0,
+                    opacity: 1
+                },
+                wireframe: {
+                    show: false,
+                    color: '#000000'
+                },
+                iso: {
+                    show: true,
+                    showFill: true,
+                    showLines: true,
+                    flat: true,
+                    nb :   7,
+                    opacity: 1,
+                    // spacing: 1,
+                    // useMinMax: true,
+                    // min: -0.4,
+                    // max:  7,
+                }
+            },
+            {
+                url: [
+                    "/data/arch/santos/diapirs.ts",
+                ],
+                show: false,
+                attr: '',
+                lut: 'Insar',
+                duplicateLut: 1,
+                name: {
+                    show: false,
+                    fontSize: 40,
+                    rect: false,
+                    translate: false
+                },
+                surface: {
+                    show: true,
+                    color: '#aaa',
+                    flat: false,
+                    creaseAngle: 0,
+                    opacity: 1
+                },
+                wireframe: {
+                    show: false,
+                    color: '#000000'
+                },
+                iso: {
+                    show: true,
+                    showFill: true,
+                    showLines: true,
+                    flat: true,
+                    nb: 20,
+                    // useMinMax: false,
+                    // min: -1e10,
+                    // max: 1e10,
+                }
+            }
+        ]
+        const plines = [
+        {
+                url: [
+                    '/data/arch/santos/test/large_faults_2022.pl',
+                    '/data/arch/santos/test/medium_faults_2022.pl',
+                    '/data/arch/santos/test/small_faults_2022.pl',
+                    '/data/arch/santos/test/very_small_faults_2022.pl',
+                ],
+                show: true,
+                useTube: true,
+                scale: 1,
+                tubeRadius: 30,
+                color: "#000"
+            }
+        ]
+        const pointsets = [
+            {
+                // url: "/data/point-cloud/salon.xyz",
+                // url: "/data/arch/spanish-peak/domain.xyz",
+                // url: "/data/arch/galapagos-all/model2/dikes_georef/points.xyz/domain-theta-Rh.xyz",
+                // url: "/data/meca/kogan.xyz",
+                url: "/data/sandbox/mw.xyz",
+                show: false,
+                attr: 'attr',
+                lut: 'Insar',
+                reverseLut: false,
+                color: '#000',
+                sizeAttenuation: false,
+                size: 5,
+                // min: 0,
+                // max: 1,
+                // useMinMax: false,
+                // opacity: 0.5,
+            }
+        ]
+
+        init()
+        load()
+        requestAnimationFrame( animate )
+
+    </script>
+</body>
+</html>

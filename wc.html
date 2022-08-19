@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Testing Kepler</title>
+    <script src='/devs/workspace/packages/dataframe/dist/@youwol/dataframe.js'></script>
+    <script src='/devs/workspace/packages/math/dist/@youwol/math.js'></script>
+    <script src='/devs/workspace/packages/geometry/dist/@youwol/geometry.js'></script>
+    <script src='/devs/workspace/packages/io/dist/@youwol/io.js'></script>
+    <script src='/devs/workspace/packages/three-extra/node_modules/three/build/three.min.js'></script>
+    <script src='/devs/workspace/packages/three-extra/node_modules/three/examples/js/renderers/SVGRenderer.js'></script>
+    <script src='/devs/workspace/packages/three-extra/node_modules/three/examples/js/renderers/Projector.js'></script>
+    <script src='/devs/workspace/packages/three-extra/node_modules/three/examples/js/controls/TrackballControls.js'></script>
+    <script src='/devs/workspace/packages/kepler/dist/@youwol/kepler.js'></script>
+    <script src='/devs/workspace/packages/three-extra/dist/@youwol/three-extra.js'></script>
+    <script src="https://kit.fontawesome.com/daa834e337.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="js/style.css">
+</head>
+<body>
+    <div class="loading" id="js-loader">
+        <div class="loader"></div>
+    </div>
+    <div class='home-container'>
+        <span>
+            <div class='buttonIcon' style="position: absolute; right: 80px;">
+                <div id='goHome'><i class='fa fa-home'></i></div>
+            </div>
+            <div class='buttonIcon' style="position: absolute; right: 45px;">
+                <div id='saveHome'><i class='fa fa-clinic-medical'></i></div>
+            </div>
+            <div class='right-container'>
+                <div id='orientCubeWrapper'></div>
+            </div>
+        </span>
+    </div>
+    <input id="btnSVGExport" type="button" value="Export SVG" onclick="btnSVGExport()" style="position: absolute; opacity: 40%; margin-bottom:3px">
+    <input id="btnScreenshot" type="button" value="Screenshot" onclick="takeScreenshot()" style="position: absolute; opacity: 40%; margin-bottom:3px; top: 25px">
+
+    <script type="text/javascript" src='./js/doSurfaces.js'></script>
+    <script type="text/javascript" src='./js/doLines.js'></script>
+    <script type="text/javascript" src='./js/doPointset.js'></script>
+    <script type="text/javascript" src='./js/postInit.js'></script>
+    <script type="text/javascript" src='./js/utils.js'></script>
+    <script type="text/javascript" src='./js/init.js'></script>
+
+    <script>
+        const three     = globalThis['THREE']        
+        const dataframe = globalThis['@youwol/dataframe']
+        const math      = globalThis['@youwol/math']
+        const geom      = globalThis['@youwol/geometry']
+        const io        = globalThis['@youwol/io']
+        const extra     = globalThis['@youwol/three-extra']
+        const kepler    = globalThis['@youwol/kepler']
+
+        const model = {
+            grid: false,
+            bbox: true,
+            backgroundColor: '#aaa'
+        }
+
+        const surfaceset = [
+            {
+                url: ['/data/meca/wc2d.ts'],
+                show: true,
+                attr: 'wc',
+                lut: 'Insar',
+                duplicateLut: 1,
+                reverseLut: false,
+                opacity: 0.5,
+                surface: {
+                    show: false,
+                    color: '#aaaaaa',
+                    flat: false,
+                    creaseAngle: 0,
+                    opacity: 0.5
+                },
+                iso: {
+                    show: true,
+                    showFill: true,
+                    showLines: true,
+                    flat: true,
+                    nb :   20,
+                    opacity: 0.7,
+                    spacing: 10,
+                    useMinMax: true,
+                    min: 0,
+                    max: 157,
+                },
+                streamlines: {
+                    show: false,
+                    attr: 'record',
+                    color: '#000000',
+                    maximumPointsPerLine: 200,
+                    dSep: 0.2,
+                    timeStep: 0.05,
+                    dTest: 0.01,
+                    maxTimePerIteration: 1000
+                },
+                vectors: {
+                    show: false,
+                    attr: 'record',
+                    scale: .3,
+                    color: '#000000',
+                    useTube: false,
+                    radius: 5
+                },
+                band: {
+                    show: false,
+                    attr: 'R',
+                    from: 0,
+                    to  : 0.01,
+                    color: '#000000',
+                    scale: 0.01
+                },
+                points: {
+                    show: false,
+                    size: 3,
+                    color: '#000000'
+                },
+                borders: {
+                    show: false,
+                    color: "#000000"
+                },
+                wireframe: {
+                    show: false,
+                    color: '#000000'
+                },
+                failure: {
+                    show: false,
+                    stress: 'S',
+                    //sizeAttribute: 'S1',
+                    //paintAttribute: 'S1',
+                    size: 25,
+                    color: '#ffff00',
+                    circle: false,
+                    borders: true,
+                    type: kepler.FractureType.DYKE
+                }
+            }
+        ]
+        const plines    = []
+        const pointsets = []
+
+        init()
+        load()
+        requestAnimationFrame( animate )
+
+    </script>
+</body>
+</html>

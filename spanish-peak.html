@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Testing Kepler</title>
+    <script src='/devs/workspace/packages/dataframe/dist/@youwol/dataframe.js'></script>
+    <script src='/devs/workspace/packages/math/dist/@youwol/math.js'></script>
+    <script src='/devs/workspace/packages/geometry/dist/@youwol/geometry.js'></script>
+    <script src='/devs/workspace/packages/io/dist/@youwol/io.js'></script>
+    <script src='/devs/workspace/packages/three-extra/node_modules/three/build/three.min.js'></script>
+    <script src='/devs/workspace/packages/three-extra/node_modules/three/examples/js/controls/TrackballControls.js'></script>
+    <script src='/devs/workspace/packages/three-extra/dist/@youwol/three-extra.js'></script>
+    <script src='/devs/workspace/packages/kepler/dist/@youwol/kepler.js'></script>    
+    <script src="https://kit.fontawesome.com/daa834e337.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="js/style.css">
+</head>
+<body>
+    <div class="loading" id="js-loader">
+        <div class="loader"></div>
+    </div>
+
+    <div class='right-container'>
+        <div id='orientCubeWrapper'></div>
+    </div>
+    <div class='home-container'>
+        <div class="row mx-md-n5">
+            <div class="col px-md-1">
+                <div class='buttonIcon'>
+                    <div id='goHome'><i class='fa fa-home'></i></div>
+                </div>
+            </div>
+            <div class="col px-md-1">
+                <div class='buttonIcon'>
+                    <div id='saveHome'><i class='fa fa-clinic-medical'></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src='./js/doSurfaces.js'></script>
+    <script type="text/javascript" src='./js/doLines.js'></script>
+    <script type="text/javascript" src='./js/doPointset.js'></script>
+    <script type="text/javascript" src='./js/postInit.js'></script>
+    <script type="text/javascript" src='./js/utils.js'></script>
+    <script type="text/javascript" src='./js/init.js'></script>
+
+    <script>
+        const three     = globalThis['THREE']        
+        const dataframe = globalThis['@youwol/dataframe']
+        const math      = globalThis['@youwol/math']
+        const geom      = globalThis['@youwol/geometry']
+        const io        = globalThis['@youwol/io']
+        const extra     = globalThis['@youwol/three-extra']
+        const kepler    = globalThis['@youwol/kepler']
+
+        const model = {
+            grid: false
+        }
+
+        const surfaceset = [
+                {
+                    // url: "/data/arch/spanish-peak/works/forward-grid.ts",
+                    url: "/data/arch/spanish-peak/forward-grid.ts",
+                    show: true,
+                    attr: 'Uy',
+                    lut: 'gist_ncar',
+                    reverseLut: false,
+                    duplicateLut: 1,
+                    surface: {
+                        show: false,
+                        color: '#aaaaaa',
+                        flat: false,
+                        creaseAngle: 0,
+                        opacity: 0.5
+                    },
+                    iso: {
+                        show: true,
+                        showFill: true,
+                        showLines: true,
+                        flat: true,
+                        nb :   20,
+                        // useMinMax: false,
+                        // min: -1e10,
+                        // max:  1e10,
+                    },
+                    vectors: {
+                        show: false,
+                        attr: 'Joint',
+                        scale: 500,
+                        color: '#000000',
+                        useTube: false,
+                        radius: 20
+                    },
+                    streamlines: {
+                        show: true,
+                        attr: 'Joint',
+                        color: '#000000'
+                    },
+                    borders: {
+                        show: true,
+                        color: "#000000"
+                    },
+                    wireframe: {
+                        show: false,
+                        color: '#000000'
+                    },
+                    failure: {
+                        show: false,
+                        stress: 'S',
+                        //sizeAttribute: 'S1',
+                        //paintAttribute: 'S1',
+                        size: 25,
+                        color: '#ffff00',
+                        circle: false,
+                        borders: true,
+                        type: kepler.FractureType.DYKE
+                    }
+                },
+                {
+                    //url: "/data/arch/spanish-peak/simulations-cavity.ts",
+                    url: "/data/arch/spanish-peak/simulations-cavity.ts",
+                    show: false,
+                    attr: '',
+                    lut: 'Insar',
+                    duplicateLut: 1,
+                    surface: {
+                        show: true,
+                        color: '#ff0000',
+                        flat: false,
+                        creaseAngle: 0,
+                        opacity: 1
+                    },
+                    iso: {
+                        show: false,
+                        showFill: true,
+                        showLines: false,
+                        flat: true,
+                        nb :   20,
+                        useMinMax: false,
+                        min: -1e10,
+                        max:  1e10,
+                    }
+                }
+            ]
+
+            const plines = [
+                {
+                    url: [ 
+                        '/data/arch/spanish-peak/dykes.pl',
+                        //'/data/arch/spanish-peak/steamlines.pl'
+                    ],
+                    show: true,
+                    useTube: true,
+                    tubeRadius: 30,
+                    color: "#000000"
+                }
+            ]
+
+            const pointsets = [
+                {
+                    url: "/data/arch/spanish-peak/result-costs.xyz",
+                    show: false,
+                    attr: 'cost',
+                    lut: 'Insar',
+                    reverseLut: false,
+                    lockLut: false,
+                    size: 4,
+                    min: 0,
+                    max: 1,
+                    opacity: 1,
+                    sizeAttenuation: true
+                },
+                {
+                    url: "/data/arch/spanish-peak/result-forward-dikes.xyz",
+                    show: false,
+                    attr: '',
+                    lut: 'Insar',
+                    reverseLut: false,
+                    min: 0,
+                    max: 1,
+                    opacity: 1,
+                    vectors: {
+                        show: false,
+                        attr: 'n',
+                        scale: 200,
+                        color: '#000000',
+                        useTube: false,
+                        radius: 20
+                    }
+                },
+                {
+                    url: "/data/arch/spanish-peak/result-forward-dikes.xyz",
+                    show: false,
+                    attr: '',
+                    lut: 'Insar',
+                    reverseLut: false,
+                    min: 0,
+                    max: 1,
+                    opacity: 1,
+                    vectors: {
+                        show: true,
+                        attr: 'newN',
+                        scale: 200,
+                        color: '#FF0000',
+                        useTube: true,
+                        radius: 20,
+                        paint: false
+                    },
+                    failure: {
+                        show: false,
+                        stress: 'S',
+                        //sizeAttribute: 'S1',
+                        //paintAttribute: 'S1',
+                        size: 60,
+                        color: '#ffff00',
+                        circle: true,
+                        borders: true,
+                        type: kepler.FractureType.DYKE
+                    }
+                }
+            ]
+
+        init()
+        load()
+        requestAnimationFrame( animate )
+
+    </script>
+</body>
+</html>

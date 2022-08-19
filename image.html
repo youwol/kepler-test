@@ -1,0 +1,128 @@
+<html>
+
+<head>
+    <script src='/devs/workspace/packages/dataframe/dist/@youwol/dataframe.js'></script>
+    <script src='/devs/workspace/packages/math/dist/@youwol/math.js'></script>
+    <script src='/devs/workspace/packages/geometry/dist/@youwol/geometry.js'></script>
+    <script src='/devs/workspace/packages/io/dist/@youwol/io.js'></script>
+    <script src='/devs/workspace/packages/three-extra/node_modules/three/build/three.min.js'></script>
+    <script src='/devs/workspace/packages/kepler/dist/@youwol/kepler.js'></script>
+</head>
+
+<body>
+    <canvas id="canvas" width=15 height=150 style="position: absolute; opacity: 100%; left: 20px; top: 20px"></canvas>
+    <script>
+        function createTextCanvas(text, color = '#000000', font = 'Arial', size = 16) {
+            var canvas = document.createElement('canvas')
+            var ctx = canvas.getContext('2d')
+            var fontStr = (size + 'px ') + font
+            ctx.font = fontStr
+            var w = ctx.measureText(text).width
+            var h = Math.ceil(size)
+            canvas.width = w
+            canvas.height = h
+            ctx.font = fontStr
+            ctx.fillStyle = color
+            ctx.fillText(text, 0, Math.ceil(size * 0.8))
+            return canvas
+        }
+    </script>
+    <script>
+        const kepler = window['@youwol/kepler']
+
+        function createColorMap(name, min, max) {
+            const map = new kepler.ColorMap('Igeoss', 150)
+
+            const c = map.createCanvas(document, 15)
+            c.style.position = "absolute"
+            c.style.left     = "10px"
+            c.style.top      = "10px"
+            c.style.opacity  = "100%"
+            document.body.appendChild(c)
+
+            // Draw Legends max
+            const M = createTextCanvas(max, color = '#000000', font = 'Arial', size = 14)
+            M.style.position = "absolute"
+            M.style.left     = "30px"
+            M.style.top      = "5px"
+            M.style.opacity  = "100%"
+            document.body.appendChild(M)
+
+            // Draw Legends max
+            const m = createTextCanvas(min, color = '#000000', font = 'Arial', size = 14)
+            m.style.position = "absolute"
+            m.style.left     = "30px"
+            m.style.top      = "150px"
+
+            return m
+        }
+
+        const m = createColorMap('Igeoss', 0.01, 10.7)
+        document.body.appendChild(m)
+
+        
+
+        /*
+        function componentToHex(c) {
+            const hex = c.toString(16)
+            return hex.length === 1 ? "0" + hex : hex
+        }
+
+        function rgbToHex(r, g, b) {
+            return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b)
+        }
+
+        const loader = new THREE.TextureLoader()
+
+        const files = [
+            'Banded.png'  , 'BlueWhiteRed.png', 'InSAR.png', 
+            'Rainbow.png' , 'Spectrum.png'    , 'BlackWhiteBlack.png', 
+            'Default.png' , 'InSAR_banded.png', 'Soegi.png', 
+            'WhiteBlack.png']
+
+        const canvas = document.getElementById('canvas')
+        const ctx = canvas.getContext('2d')
+
+        const file = files[8]
+
+        loader.load(
+            './images/'+file,
+            tex => {
+                const width = tex.image.width
+
+                // Fake canvas and context
+                const canvas = document.createElement('canvas')
+                const context = canvas.getContext('2d')
+                context.drawImage(tex.image, 0, 0)
+                const imageData = context.getImageData(0, 0, width, 1)
+                const data      = imageData.data
+                const length    = imageData.colorSpace.length
+                
+                // Draw the colorbar
+                for (let i = 0; i < width * length; i += length) {
+                    ctx.fillStyle = "#" + ("000000" + rgbToHex(data[i + 0], data[i + 1], data[i + 2])).slice(-6)
+                    ctx.fillRect(0, i/4, 15, 1)
+                }
+
+                // Draw Legends max
+                const M = createTextCanvas("2.567", color = '#000000', font = 'Arial', size = 14)
+                M.style.position = "absolute"
+                M.style.left     = "40px"
+                M.style.top      = "15px"
+                document.body.appendChild(M)
+
+                // Draw Legends max
+                const m = createTextCanvas("-1.765", color = '#000000', font = 'Arial', size = 14)
+                m.style.position = "absolute"
+                m.style.left     = "40px"
+                m.style.top      = "160px" // 150 + 10
+                document.body.appendChild(m)
+            },
+            undefined,
+            undefined
+        )
+        */
+    </script>
+</body>
+
+</html>

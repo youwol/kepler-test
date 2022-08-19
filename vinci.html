@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Testing Kepler</title>
+    <script src='/devs/workspace/packages/dataframe/dist/@youwol/dataframe.js'></script>
+    <script src='/devs/workspace/packages/math/dist/@youwol/math.js'></script>
+    <script src='/devs/workspace/packages/geometry/dist/@youwol/geometry.js'></script>
+    <script src='/devs/workspace/packages/io/dist/@youwol/io.js'></script>
+    <script src='/devs/workspace/packages/three-extra/node_modules/three/build/three.min.js'></script>
+    <script src='/devs/workspace/packages/three-extra/node_modules/three/examples/js/controls/TrackballControls.js'></script>
+    <script src='/devs/workspace/packages/three-extra/dist/@youwol/three-extra.js'></script>
+    <script src='/devs/workspace/packages/kepler/dist/@youwol/kepler.js'></script>
+    <script src="https://kit.fontawesome.com/daa834e337.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/d3@5.7.0/dist/d3.min.js"></script>
+    <script src="https://unpkg.com/d3fc@14.0.27/build/d3fc.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="js/style.css">
+</head>
+
+<body>
+    <div class="loading" id="js-loader">
+        <div class="loader"></div>
+    </div>
+    <div class='home-container'>
+        <span>
+            <div class='buttonIcon' style="position: absolute; right: 80px;">
+                <div id='goHome'><i class='fa fa-home'></i></div>
+            </div>
+            <div class='buttonIcon' style="position: absolute; right: 45px;">
+                <div id='saveHome'><i class='fa fa-clinic-medical'></i></div>
+            </div>
+            <div class='right-container'>
+                <div id='orientCubeWrapper'></div>
+            </div>
+        </span>
+    </div>
+
+    <script type="text/javascript" src='./js/doSurfaces.js'></script>
+    <script type="text/javascript" src='./js/doLines.js'></script>
+    <script type="text/javascript" src='./js/doPointset.js'></script>
+    <script type="text/javascript" src='./js/postInit.js'></script>
+    <script type="text/javascript" src='./js/utils.js'></script>
+    <script type="text/javascript" src='./js/init.js'></script>
+
+    <script>
+        const three = globalThis['THREE']
+        const dataframe = globalThis['@youwol/dataframe']
+        const math = globalThis['@youwol/math']
+        const geom = globalThis['@youwol/geometry']
+        const io = globalThis['@youwol/io']
+        const extra = globalThis['@youwol/three-extra']
+        const kepler = globalThis['@youwol/kepler']
+
+        const model = {
+            grid: false,
+            bbox: false,
+            backgroundColor: '#aaa',
+            colorScale: false
+        }
+
+        const surfaceset = [
+            {
+                url: '/data/vinci/crack/grid.ts',
+                show: true,
+                attr: 'Sz',
+                lut: 'Insar',
+                duplicateLut: 1,
+                surface: {
+                    show: false,
+                    color: '#aaa',
+                    flat: false,
+                    creaseAngle: 0,
+                    opacity: 1
+                },
+                iso: {
+                    show: true,
+                    showFill: true,
+                    showLines: true,
+                    flat: false,
+                    nb: 20,
+                    // useMinMax: true,
+                    // min: -10,
+                    // max: 2,
+                },
+                streamlines: {
+                    show: false,
+                    attr: 'U',
+                    color: '#000000',
+                    maximumPointsPerLine: 50,
+                    dSep: 0.1,
+                    timeStep: 0.05,
+                    dTest: 0.08,
+                    maxTimePerIteration: 1000
+                },
+                vectors: {
+                    show: false,
+                    attr: 'U',
+                    scale: 0.5,
+                    color: '#000000',
+                    useTube: false,
+                    radius: 20
+                },
+                band: {
+                    show: false,
+                    attr: 'z',
+                    from: 100,
+                    to  : 110,
+                    color: '#000000',
+                    scale: 0.1
+                },
+                wireframe: {
+                    show: false,
+                    color: '#000000'
+                },
+                borders: {
+                    show: true,
+                    color: "#000000"
+                }
+            }
+        ]
+
+        const plines  = [
+            {
+                url: [
+                    '/data/vinci/pl/horizontal.pl',
+                ],
+                show: false,
+                useTube: true,
+                tubeRadius: 0.5,
+                color: "#000000"
+            }
+        ]
+        const pointsets = []
+
+        init()
+        load()
+        requestAnimationFrame(animate)
+
+    </script>
+</body>
+
+</html>

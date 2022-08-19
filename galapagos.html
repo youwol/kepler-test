@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Testing Kepler</title>
+
+    <script src='/devs/workspace/packages/dataframe/dist/@youwol/dataframe.js'></script>
+    <script src='/devs/workspace/packages/math/dist/@youwol/math.js'></script>
+    <script src='/devs/workspace/packages/geometry/dist/@youwol/geometry.js'></script>
+    <script src='/devs/workspace/packages/io/dist/@youwol/io.js'></script>
+
+    <script src='/devs/workspace/packages/three-extra/node_modules/three/build/three.min.js'></script>
+    <script src='/devs/workspace/packages/three-extra/node_modules/three/examples/js/controls/TrackballControls.js'></script>
+    <script src='/devs/workspace/packages/three-extra/node_modules/three/examples/js/renderers/SVGRenderer.js'></script>
+    <script src='/devs/workspace/packages/three-extra/node_modules/three/examples/js/renderers/Projector.js'></script>
+    <script src='/devs/workspace/packages/three-extra/dist/@youwol/three-extra.js'></script>
+    <script src='/devs/workspace/packages/kepler/dist/@youwol/kepler.js'></script>
+
+    <script src="https://kit.fontawesome.com/daa834e337.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="js/style.css">
+</head>
+
+<body>
+    <div class="loading" id="js-loader">
+        <div class="loader"></div>
+    </div>
+
+    <div class='home-container'>
+        <div class="row mx-md-n5">
+            <div class="col px-md-1">
+                <div class='buttonIcon'>
+                    <div id='goHome'><i class='fa fa-home'></i></div>
+                </div>
+            </div>
+            <div class="col px-md-1">
+                <div class='buttonIcon'>
+                    <div id='saveHome'><i class='fa fa-clinic-medical'></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class='right-container'>
+        <div id='orientCubeWrapper'></div>
+    </div>
+
+    <!-- <div class="top-1 start-1" style='position: absolute; opacity: 75%; left: 10px; top: 10px'>
+        <div class="card" style="width: 300px; height: 150px; background-color: rgb(193, 193, 193);">
+            <div class="card-body">
+                <div class="card-title" style='font-size: 20px; font-weight: bold;'>Object info</div>
+                <div class="card-text">Vertices:</div>
+                <div class="card-text">Faces:</div>
+                <div class="card-text">Center:</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="top-1 start-1" style='position: absolute; opacity: 75%; left: 10px; top: 180px'>
+        <div class="card" style="width: 300px; height: 130px; background-color: rgb(193, 193, 193);">
+            <div class="card-body">
+                <div class="card-title" style='font-size: 20px; font-weight: bold;'>Vertex info</div>
+                <div class="card-text">Position:</div>
+                <div class="card-text">attributes:</div>
+            </div>
+        </div>
+    </div> -->
+
+    <input id="btnSVGExport" type="button" value="Export SVG" onclick="btnSVGExport()" style="position: absolute; opacity: 40%; margin-bottom:3px; top: 5px; left: 5px;">
+    <input id="btnScreenshot" type="button" value="Screenshot" onclick="takeScreenshot()" style="position: absolute; opacity: 40%; margin-bottom:3px; top: 40px; left: 5px;">
+
+    <div class="bottom-1 start-1" style='position: absolute; opacity: 40%; left: 20px; bottom: 20px'>
+        <img src="youwol-logo.png" alt="youwol">
+    </div>
+    <div class="bottom-1 start-1" style='position: absolute; opacity: 40%; left: 55px; bottom: 0px'>
+        <div class="card-title" style='font-size: 30px; font-weight: bold; z-index: 999;'>YouWol</div>
+    </div>
+
+    <script type="text/javascript" src='./js/doSurfaces.js'></script>
+    <script type="text/javascript" src='./js/doLines.js'></script>
+    <script type="text/javascript" src='./js/doPointset.js'></script>
+    <script type="text/javascript" src='./js/postInit.js'></script>
+    <script type="text/javascript" src='./js/utils.js'></script>
+    <script type="text/javascript" src='./js/init.js'></script>
+
+    <script>
+
+        //import TrackballControls from '../node_modules/three-trackballcontrols/index.js'
+        //import { init } from './js/init.js'
+
+        const dataframe = globalThis['@youwol/dataframe']
+        const math = globalThis['@youwol/math']
+        const geom = globalThis['@youwol/geometry']
+        const io = globalThis['@youwol/io']
+
+        const three = globalThis['THREE']
+        const extra = globalThis['@youwol/three-extra']
+        const kepler = globalThis['@youwol/kepler']
+
+        const model = {
+            grid: false,
+            backgroundColor: '#fff'
+        }
+
+        const surfaceset = [
+            {
+                url: ["/data/arch/galapagos-all/NEW/forward-grid-superposition.ts"],
+                // url: ["/data/arch/galapagos-all/NEW/forward-dykes-superposition.ts"],
+                show: true,
+                attr: 'Sxx',
+                lut: 'Insar',
+                duplicateLut: 1,
+                reverseLut: false,
+                name: {
+                    show: false,
+                    fontSize: 40,
+                    rect: false
+                },
+                surface: {
+                    show: false,
+                    color: '#aaa',
+                    flat: false,
+                    creaseAngle: 0,
+                    opacity: 0.8
+                },
+                iso: {
+                    show: true,
+                    showFill: true,
+                    showLines: false,
+                    flat: false,
+                    // list: new Array(20).fill(0).map( (_,i) => i*0.05/20), //[0, 0.01, 0.02, 0.03, 0.04, 0.05]
+                    nb: 10,
+                    // useMinMax: false,
+                    // min: 0,
+                    // max: 0.1,
+                },
+                streamlines: {
+                    show: true,
+                    attr: 'S2',
+                    color: '#000000',
+                    maximumPointsPerLine: 50,
+                    dSep: 0.1,
+                    timeStep: 0.05,
+                    dTest: 0.08,
+                    maxTimePerIteration: 1000
+                },
+                vectors: {
+                    show: false,
+                    attr: 'S2',
+                    scale: 1000,
+                    color: '#000000',
+                    useTube: true,
+                    radius: 50
+                },
+                borders: {
+                    show: true,
+                    color: "#ff0000"
+                },
+                wireframe: {
+                    show: false,
+                    color: '#000000'
+                },
+                failure: {
+                    show: true,
+                    stress: 'S',
+                    //sizeAttribute: 'S1',
+                    //paintAttribute: 'S1',
+                    size: 30,
+                    color: '#ffff00',
+                    // color: '#049ef4',
+                    circle: true,
+                    borders: true,
+                    borderColor: "#000000",
+                    type: kepler.FractureType.DYKE
+                },
+                band: {
+                    show: false,
+                    attr: 'R',
+                    from: 0.5,
+                    to  : 0.88,
+                    color: '#000000',
+                    // translate: [0,0,10],
+                    scale: 1
+                }
+            },
+            {
+                url: [
+                    "/data/arch/galapagos-all/NEW/alcedo.ts",
+                    "/data/arch/galapagos-all/NEW/cerro_azul_mod4.ts",
+                    "/data/arch/galapagos-all/NEW/darwin.ts",
+                    "/data/arch/galapagos-all/NEW/ecuador.ts",
+                    "/data/arch/galapagos-all/NEW/fernandina.ts",
+                    "/data/arch/galapagos-all/NEW/sierra_negra.ts",
+                    "/data/arch/galapagos-all/NEW/wolf.ts"
+                ],
+                show: true,
+                attr: '',
+                lut: 'Insar',
+                duplicateLut: 1,
+                name: {
+                    show: false,
+                    fontSize: 40,
+                    rect: false,
+                    translate: true
+                },
+                surface: {
+                    show: true,
+                    color: '#ff0000',
+                    flat: false,
+                    creaseAngle: 0,
+                    opacity: 1
+                },
+                wireframe: {
+                    show: true,
+                    color: '#000000'
+                },
+                iso: {
+                    show: false,
+                    showFill: true,
+                    showLines: false,
+                    flat: true,
+                    nb: 20,
+                    useMinMax: false,
+                    min: -1e10,
+                    max: 1e10,
+                }
+            }
+        ]
+
+        const plines = [
+            {
+                url: [
+                    '/data/arch/galapagos-all/NEW/data.pl'
+                ],
+                show: false,
+                useTube: true,
+                scale: 1,
+                tubeRadius: 100,
+                color: "#000"
+            }
+        ]
+
+        const pointsets = [
+            {
+                url: "/data/arch/galapagos-all/NEW/forward-dykes-superposition.xyz",
+                show: false,
+                attr: 'cost',
+                lut: 'Insar',
+                reverseLut: false,
+                size: 5,
+                min: 0,
+                max: 1,
+                opacity: 1,
+
+                vectors: {
+                    show: false,
+                    attr: 'newN',
+                    scale: 500,
+                    color: '#000000',
+                    useTube: true,
+                    radius: 20
+                }
+            },
+            {
+                url: "/data/arch/galapagos-all/NEW/result-forward-dikes.xyz",
+                show: false,
+                attr: '',
+                lut: 'Insar',
+                reverseLut: false,
+                min: 0,
+                max: 1,
+                opacity: 1,
+                vectors: {
+                    show: true,
+                    attr: 'newN',
+                    scale: 200,
+                    color: '#0000FF',
+                    useTube: false,
+                    radius: 20
+                }
+            }
+        ]
+
+        init()
+        load()
+        requestAnimationFrame(animate)
+
+    </script>
+</body>
+
+</html>
