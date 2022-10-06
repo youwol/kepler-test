@@ -1,6 +1,6 @@
 {
     "name": "kepler-test",
-    "version": "0.0.0",
+    "version": "0.0.1-wip",
     "description": "",
     "main": "index.js",
     "scripts": {
