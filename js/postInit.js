@@ -13,12 +13,12 @@ function postInit() {
     const keyboard = new extra.Keyboard(document, 'keydown')
     // keyboard.setUpEvent(e => {controls.constraint = extra.CONSTRAINT.NONE})
 
-    keyboard.addKey({key:'u', cb:e => extra.changeView('up', {scene, camera, controls}) })
-    keyboard.addKey({key:'d', cb:e => extra.changeView('down', {scene, camera, controls}) })
-    keyboard.addKey({key:'s', cb:e => extra.changeView('south', {scene, camera, controls}) })
-    keyboard.addKey({key:'n', cb:e => extra.changeView('north', {scene, camera, controls}) })
-    keyboard.addKey({key:'e', cb:e => extra.changeView('east', {scene, camera, controls}) })
-    keyboard.addKey({key:'w', cb:e => extra.changeView('west', {scene, camera, controls}) })
+    keyboard.addKey({key:'u', cb:e => extra.changeView('up', {scene, camera, controls, selection: sphereFake}) })
+    keyboard.addKey({key:'d', cb:e => extra.changeView('down', {scene, camera, controls, selection: sphereFake}) })
+    keyboard.addKey({key:'s', cb:e => extra.changeView('south', {scene, camera, controls, selection: sphereFake}) })
+    keyboard.addKey({key:'n', cb:e => extra.changeView('north', {scene, camera, controls, selection: sphereFake}) })
+    keyboard.addKey({key:'e', cb:e => extra.changeView('east', {scene, camera, controls, selection: sphereFake}) })
+    keyboard.addKey({key:'w', cb:e => extra.changeView('west', {scene, camera, controls, selection: sphereFake}) })
 
     keyboard.addKey({key:' ', cb: e => {
         if (cube) cube.restoreView()

@@ -60,6 +60,13 @@ function doPointset(psetInfo) {
                     let position = df.series['positions']
                     console.log('min-max position pointset:', math.minMax(position) )
 
+                    if (psetInfo.translation) {
+                        const x = psetInfo.translation[0]
+                        const y = psetInfo.translation[1]
+                        const z = psetInfo.translation[2]
+                        position = position.map(v => [v[0] + x, v[1] + y, v[2] + z])
+                    }
+
                     const manager = new dataframe.Manager(df, [
                         new math.PositionDecomposer,
                         new math.ComponentDecomposer,
