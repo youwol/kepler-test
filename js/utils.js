@@ -1,3 +1,19 @@
+function changeFOV(id) {
+    let itemList = document.getElementById("fov")
+    let collection = itemList.selectedOptions
+    if (collection[0].label === 'Perspective') {
+        camera.fov = 45
+    }
+    else {
+        camera.fov = 1
+    }
+    // const fov = parseFloat(collection[0].label)
+    // camera.fov = fov
+    camera.updateProjectionMatrix()
+    extra.fitScene({scene, camera, controls})
+    // extra.zoomToModel({scene, camera, controls, duration:300})
+}
+
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight
     camera.updateProjectionMatrix()

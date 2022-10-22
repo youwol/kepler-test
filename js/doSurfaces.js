@@ -88,6 +88,32 @@ function doSurface(surfaceInfo) {
                     }
                 }
 
+                class MCSS {
+                    constructor(friction = 0.6, name = 'MCSS', stressName = 'S') {
+                        this.name       = name
+                        this.stressName = stressName
+                        this.fric       = friction
+                        this.fric2      = Math.sqrt(1+this.fric**2)
+                    }
+                    names(df, itemSize, serie, name) {
+                        if (!df.contains(this.stressName)) return []
+                        if (itemSize !== 1) return []
+                        return [this.name]
+                    }
+                    serie(df, itemSize, name) {
+                        if (itemSize !== 1) return undefined
+                        if (name !== this.name) return undefined
+                        let stress = df.series[this.stressName]
+                        if (!stress) return undefined
+
+                        return math.eigenValue(stress).map(s => {
+                            const s1 = s[0]
+                            const s3 = s[2]
+                            return (s1-s3)/2*this.fric2 - this.fric*Math.sqrt(Math.abs(s1+s3)/2)
+                        })
+                    }
+                }
+
                 class StressVerticallity  {
                     constructor(name = 'Svdir', stressName = 'S') {
                         this.name = name
@@ -152,12 +178,13 @@ function doSurface(surfaceInfo) {
                 dfs.forEach(df => {
                     let skin
 
-                    console.log('loaded object named', df.userData.name)
-
                     let position = df.series.positions
                     let indices = df.series.indices
 
-                    console.log('min-max position surface:', math.minMax(position))
+                    if (!position || !indices) return
+
+                    // console.log('loaded object named', df.userData.name, 'with', position.count, 'vertices and ', indices.count, ' triangles')
+                    // console.log('min-max position surface:', math.minMax(position))
 
                     if (surfaceInfo.translation) {
                         const x = surfaceInfo.translation[0]
@@ -175,6 +202,7 @@ function doSurface(surfaceInfo) {
                         new geom.NormalsToNodeDecomposer,
                         new RDecomposer,
                         new StressVerticallity,
+                        new MCSS(0.6),
                         // new UDecomposer,
                         new geom.TriangleToNodeDecomposer({
                             positions: position,
@@ -184,7 +212,7 @@ function doSurface(surfaceInfo) {
                         new geom.CurvatureDecomposer({positions: position, indices})
                     ])
 
-                    console.log(manager.names(1))
+                    // console.log(manager.names(1))
 
                     // DEFORMATION ?
                     if (surfaceInfo.deformation !==undefined && surfaceInfo.deformation.active===true) {

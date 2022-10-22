@@ -142,9 +142,9 @@
 
         const surfaceset = [
             {
-                url: ["/data/arch/santos/test/forward-grid-superposition.ts"],
+                url: ["/data/arch/Sanz/forward-grid-superposition.ts"],
                 // url: ["/data/arch/santos/test/forward-grid.ts"],
-                show: true,
+                show: false,
                 attr: 'MCSS',
                 lut: 'Insar',
                 duplicateLut: 1,
@@ -289,73 +289,12 @@
                     // min: 0,
                     // max: 30,
                 }
-            },
-            {
-                url: ["/data/arch/santos/test/forward-fault.ts"],
-                show: false,
-                attr: 'U',
-                lut: 'Insar',
-                duplicateLut: 1,
-                name: {
-                    show: false,
-                    fontSize: 40,
-                    rect: true,
-                    translate: false
-                },
-                surface: {
-                    show: false,
-                    color: '#ff0000',
-                    flat: false,
-                    creaseAngle: 0,
-                    opacity: 1
-                },
-                wireframe: {
-                    show: false,
-                    color: '#000000'
-                },
-                iso: {
-                    show: true,
-                    showFill: true,
-                    showLines: false,
-                    flat: true,
-                    nb: 20,
-                    // useMinMax: false,
-                    // min: -1e10,
-                    // max: 1e10,
-                }
-            },
-            {
-                url: [
-                    "/data/arch/santos/test/obs_neutral_points.ts",
-                ],
-                show: false,
-                attr: '',
-                lut: 'Insar',
-                duplicateLut: 1,
-                name: {
-                    show: false,
-                    fontSize: 40,
-                    rect: true,
-                    translate: false
-                },
-                surface: {
-                    show: true,
-                    color: '#ff0000',
-                    flat: false,
-                    creaseAngle: 0,
-                    opacity: 1
-                }
             }
         ]
 
         const plines = [
             {
-                url: [
-                    '/data/arch/santos/test/large_faults_2022.pl',
-                    '/data/arch/santos/test/medium_faults_2022.pl',
-                    '/data/arch/santos/test/small_faults_2022.pl',
-                    '/data/arch/santos/test/very_small_faults_2022.pl',
-                ],
+                url: [],
                 show: false,
                 useTube: true,
                 scale: 1,
@@ -367,19 +306,38 @@
         const pointsets = [
             {
                 url: [
-                    "/data/arch/santos/test/result-forward-large.xyz", 
-                    "/data/arch/santos/test/result-forward-medium.xyz", 
-                    // "/data/arch/santos/test/result-forward-small.xyz",
-                    // "/data/arch/santos/test/result-forward-very-small.xyz"
+                    "/data/arch/Sanz/result-forward-data_disconnected.xyz"
                 ],
-                show: false,
-                attr: 'cost',
+                show: true,
+                attr: 'Szz',
                 lut: 'Insar',
                 reverseLut: false,
-                size: 4,
+                size: 10,
                 min: 0,
                 max: 1,
                 opacity: 1,
+                vectors: {
+                    show: false,
+                    attr: 'newN',
+                    scale: 500,
+                    color: '#000000',
+                    useTube: true,
+                    radius: 20
+                }
+            },
+            {
+                url: [
+                    "/data/arch/Sanz/data_disconnected.xyz"
+                ],
+                show: true,
+                attr: 'Szz_norm',
+                lut: 'Insar',
+                reverseLut: false,
+                size: 10,
+                min: 0,
+                max: 1,
+                opacity: 1,
+                translation: [0,-100,0],
                 vectors: {
                     show: false,
                     attr: 'newN',

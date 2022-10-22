@@ -63,15 +63,41 @@ function doPLine(plineInfo) {
                             }
                             // console.log('min-max position pointset:', math.minMax(position) )
 
-                            let skin = kepler.createLineset({
+                            const manager = new dataframe.Manager(df, [
+                                new math.PositionDecomposer,       // x y z
+                                new math.ComponentDecomposer,      // Ux Uy Uz Sxx Sxy Sz Syy Syz Szz
+                                new math.VectorNormDecomposer,     // U
+                                new math.EigenValuesDecomposer,    // S1 S2 S3
+                                new math.EigenVectorsDecomposer,   // S1 S2 S3
+                            ])
+
+                            let skin = kepler.createLineset2({
                                 position: df.series.positions,
                                 parameters: {
+                                    width: plineInfo.width?plineInfo.width:1,
                                     color: plineInfo.color,
-                                    useTube: plineInfo.useTube,
-                                    tubeRadius: plineInfo.tubeRadius
+                                    opacity   : plineInfo.opacity  !==undefined ? plineInfo.opacity   : 1,
+                                    dashed    : plineInfo.dashed   !==undefined ? plineInfo.dashed    : false,
+                                    dashScale : plineInfo.dashScale!==undefined ? plineInfo.dashScale : 0.1
                                 }
                             })
                             group.add( skin )
+
+                            if (plineInfo.attr) {
+                                const attrName = plineInfo.attr
+                                const attr = manager.serie(1, attrName)
+                                if (attr) {
+                                    // const mM = math.minMaxArray(attr.array)
+                                    // console.log('attr :', attrName)
+                                    // console.log('min  :', mM[0].toFixed(3))
+                                    // console.log('max  :', mM[1].toFixed(3))
+                                    kepler.paintAttribute(skin, attr, new kepler.PaintParameters({
+                                        atVertex  : true,
+                                        lut       : plineInfo.lut!==undefined?plineInfo.lut: 'insar',
+                                        reverseLut: plineInfo.reverseLut!==undefined?plineInfo.reverseLut: false
+                                    }))
+                                }
+                            }
                         }
                     })
                 }

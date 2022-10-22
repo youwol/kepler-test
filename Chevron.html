@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Testing Kepler</title>
+    <title>Chevron model</title>
 
     <script src='/devs/workspace/packages/dataframe/dist/@youwol/dataframe.js'></script>
     <script src='/devs/workspace/packages/math/dist/@youwol/math.js'></script>
@@ -44,8 +44,6 @@
         </div>
     </div>
 
-    <input id="btnSVGExport" type="button" value="Export SVG" onclick="btnSVGExport()" style="position: absolute; opacity: 40%; margin-bottom:3px">
-
     <div class='right-container'>
         <div id='orientCubeWrapper'></div>
     </div>
@@ -71,6 +69,28 @@
         </div>
     </div> -->
 
+    <input id="btnSVGExport" type="button" value="Export SVG" onclick="btnSVGExport()" style="position: absolute; opacity: 40%; margin-bottom:3px; top: 5px; left: 5px;">
+    <input id="btnScreenshot" type="button" value="Screenshot" onclick="takeScreenshot()" style="position: absolute; opacity: 40%; margin-bottom:3px; top: 40px; left: 5px;">
+
+    <select name="FOV" id="fov" style="position: absolute; opacity: 70%; margin-bottom:3px; top: 110px; left: 5px;" onchange="changeFOV(this.selectedIndex)">
+        <option value="Perspective" selected>Perspective</option>
+        <option value="Orthographic">Orthographic</option>
+        <!-- <option value="100">100</option>
+        <option value="70" selected>70</option>
+        <option value="30">30</option>
+        <option value="10">10</option>
+        <option value="5">5</option>
+        <option value="2">2</option>
+        <option value="1">1</option> -->
+    </select>
+
+    <div class="bottom-1 start-1" style='position: absolute; opacity: 40%; left: 20px; bottom: 20px'>
+        <img src="youwol-logo.png" alt="youwol">
+    </div>
+    <div class="bottom-1 start-1" style='position: absolute; opacity: 40%; left: 55px; bottom: 0px'>
+        <div class="card-title" style='font-size: 30px; font-weight: bold; z-index: 999;'>YouWol</div>
+    </div>
+
     <script type="text/javascript" src='./js/doSurfaces.js'></script>
     <script type="text/javascript" src='./js/doLines.js'></script>
     <script type="text/javascript" src='./js/doPointset.js'></script>
@@ -79,10 +99,6 @@
     <script type="text/javascript" src='./js/init.js'></script>
 
     <script>
-
-        //import TrackballControls from '../node_modules/three-trackballcontrols/index.js'
-        //import { init } from './js/init.js'
-
         const dataframe = globalThis['@youwol/dataframe']
         const math = globalThis['@youwol/math']
         const geom = globalThis['@youwol/geometry']
@@ -94,72 +110,34 @@
 
         const model = {
             grid: false,
-            bbox: false
+            backgroundColor: '#fff'
         }
 
-        const index = 0
-        // const z = -index*50
-        const z = 500
-
+        const path = '/data/cassini/Chevron'
         const surfaceset = [
             {
-                // simulations-grid.ts-6
-                // url: [`/data/arch/fernandina/simulations-grid.ts`],
-                // url: [`/data/arch/fernandina/forward-grid.ts`],
-                // url: [`/data/arch/fernandina/test-forward-grid-superposition.ts`],
-                url: '/data/arch/fernandina/test-forward-grid.ts',
-                show: true,
-                attr: 'Sxx',
+                // url: new Array(7).fill(undefined).map( (_,i) => `${path}/gocad/boundary/boundary_${i}.ts` ),
+                url: [`${path}/gocad/voi/voi.ts`],
+                show: false,
+                attr: '',
                 lut: 'Insar',
                 duplicateLut: 1,
-                opacity: 1,
-                surface: {
+                reverseLut: false,
+                name: {
                     show: false,
-                    color: '#aaa',
-                    flat: false,
+                    fontSize: 40,
+                    rect: false
+                },
+                surface: {
+                    show: true,
+                    // color: '#aaa',
+                    flat: true,
                     creaseAngle: 0,
                     opacity: 1
                 },
-                iso: {
-                    show: true,
-                    showFill: true,
-                    showLines: true,
-                    flat: false,
-                    opacity: 1,
-                    nb: 20,
-                    // spacing: 50e4,
-                    // useMinMax: false,
-                    // min: -1e10,
-                    // max: 1e10,
-                },
-                streamlines: {
-                    show: false,
-                    attr: 'S2',
-                    scale: 50,
-                    color: '#000000'
-                },
                 borders: {
-                    show: true,
+                    show: false,
                     color: "#ff0000"
-                },
-                vectors: {
-                    show: false,
-                    attr: 'S2',
-                    scale: 1000,
-                    color: '#000000',
-                    useTube: false,
-                    radius: 50
-                },
-                failure: {
-                    show: false,
-                    stress: 'S',
-                    size: 100,
-                    color: '#ffff00',
-                    // color: '#049ef4',
-                    circle: true,
-                    borders: true,
-                    borderColor: "#000000",
-                    type: kepler.FractureType.DYKE
                 },
                 wireframe: {
                     show: false,
@@ -167,68 +145,65 @@
                 }
             },
             {
-                url: ["/data/arch/fernandina/fernandina_2000.ts"],
-                show: false,
+                url: new Array(3).fill(undefined).map( (_,i) => `${path}/gocad/fault/F${i}.ts` ),
+                show: true,
                 attr: '',
                 lut: 'Insar',
                 duplicateLut: 1,
+                reverseLut: false,
+                name: {
+                    show: false,
+                    fontSize: 40,
+                    rect: false
+                },
                 surface: {
                     show: true,
-                    color: '#ff0000',
+                    color: '#17f',
                     flat: false,
                     creaseAngle: 0,
                     opacity: 1
+                },
+                borders: {
+                    show: false,
+                    color: "#ff0000"
+                },
+                wireframe: {
+                    show: false,
+                    color: '#000000'
                 }
-            }
-        ]
-
-        const plines = [
-            {
-                url: [
-                    "/data/arch/fernandina/Fernandina_concentric_dikes_georef_good.pl",
-                    "/data/arch/fernandina/Fernandina_radial_dikes_georef_good.pl"
-                ],
-                show: true,
-                useTube: true,
-                tubeRadius: 30,
-                width: .004,
-                color: "#000000",
-                translate: [0,0,-z]
             },
             {
-                url: [
-                    "/data/arch/fernandina/out/streamlines.pl"
-                ],
-                show: false,
-                useTube: false,
-                tubeRadius: 30,
-                color: "#000000",
-                translate: [0,0,z]
-            }
-        ]
-
-        const pointsets = [
-            {
-                url: `/data/arch/fernandina/out/result-forward-dikes-${index}.xyz`,
-                show: false,
-                showPoints: false,
-                attr: 'misfit',
+                url: [...new Array(7).fill(undefined).map( (_,i) => `${path}/gocad/horizon/hz${10+i}.ts` ), path+'/gocad/horizon/hz09.ts'],
+                show: true,
+                attr: '',
                 lut: 'Insar',
+                duplicateLut: 1,
                 reverseLut: false,
-                min: 0,
-                max: 90,
-                opacity: 1,
-                size: 5,
-                vectors: {
+                name: {
+                    show: false,
+                    fontSize: 40,
+                    rect: false
+                },
+                surface: {
                     show: true,
-                    attr: 'newN',
-                    scale: 200,
-                    color: '#0000FF',
-                    useTube: true,
-                    radius: 30
+                    // color: '#88f',
+                    flat: false,
+                    creaseAngle: 0,
+                    opacity: 1
+                },
+                borders: {
+                    show: false,
+                    color: "#ff0000"
+                },
+                wireframe: {
+                    show: false,
+                    color: '#000000'
                 }
             }
         ]
+
+        const plines = []
+        const pointsets = []
 
         init()
         load()

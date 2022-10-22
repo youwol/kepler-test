@@ -60,9 +60,9 @@
         const surfaceset = [
                 {
                     // url: "/data/arch/spanish-peak/works/forward-grid.ts",
-                    url: "/data/arch/spanish-peak/forward-grid.ts",
+                    url: "/data/arch/spanish-peak/forward-grid-superposition.ts",
                     show: true,
-                    attr: 'Uy',
+                    attr: '',
                     lut: 'gist_ncar',
                     reverseLut: false,
                     duplicateLut: 1,
@@ -93,8 +93,15 @@
                     },
                     streamlines: {
                         show: true,
-                        attr: 'Joint',
-                        color: '#000000'
+                        attr: 'S2',
+                        color: '#ff0000',
+                        useTube: true,
+                        tubeRadius: 30,
+                        maximumPointsPerLine: 50,
+                        dSep: 0.2,
+                        timeStep: 0.05,
+                        dTest: 0.08,
+                        maxTimePerIteration: 1000
                     },
                     borders: {
                         show: true,
@@ -117,7 +124,6 @@
                     }
                 },
                 {
-                    //url: "/data/arch/spanish-peak/simulations-cavity.ts",
                     url: "/data/arch/spanish-peak/simulations-cavity.ts",
                     show: false,
                     attr: '',
@@ -146,13 +152,28 @@
             const plines = [
                 {
                     url: [ 
-                        '/data/arch/spanish-peak/dykes.pl',
-                        //'/data/arch/spanish-peak/steamlines.pl'
+                        '/data/arch/spanish-peak/dykes_group_01.pl'
                     ],
                     show: true,
-                    useTube: true,
-                    tubeRadius: 30,
-                    color: "#000000"
+                    width: .004,
+                    attr: 'x',
+                    color: "#ff0000"
+                },
+                {
+                    url: [ 
+                        '/data/arch/spanish-peak/dykes_group_02.pl'
+                    ],
+                    show: true,
+                    width: .004,
+                    color: "#00ff00"
+                },
+                {
+                    url: [ 
+                        '/data/arch/spanish-peak/dykes_group_03.pl'
+                    ],
+                    show: true,
+                    width: .004,
+                    color: "#0000ff"
                 }
             ]
 

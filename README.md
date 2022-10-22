@@ -4,7 +4,12 @@
 ## Description
 Testing `@youwol/kepler`
 
-## Use 
+## Install
+```shell
+yarn serve
+```
+
+## Usage
 ```shell
 yarn serve
 ```

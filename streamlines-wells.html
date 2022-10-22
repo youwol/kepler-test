@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Testing Kepler</title>
+    <title>Streamlines wells</title>
     <script src='/devs/workspace/packages/dataframe/dist/@youwol/dataframe.js'></script>
     <script src='/devs/workspace/packages/math/dist/@youwol/math.js'></script>
     <script src='/devs/workspace/packages/geometry/dist/@youwol/geometry.js'></script>
@@ -11,25 +11,30 @@
     <script src='/devs/workspace/packages/three-extra/node_modules/three/examples/js/controls/TrackballControls.js'></script>
     <script src='/devs/workspace/packages/three-extra/dist/@youwol/three-extra.js'></script>
     <script src='/devs/workspace/packages/kepler/dist/@youwol/kepler.js'></script>    
-    <script src="https://kit.fontawesome.com/daa834e337.js" crossorigin="anonymous"></script>
+    <!-- <script src="https://kit.fontawesome.com/daa834e337.js" crossorigin="anonymous"></script> -->
     <link rel="stylesheet" href="js/style.css">
 </head>
 <body>
     <div class="loading" id="js-loader">
         <div class="loader"></div>
     </div>
+
+    <div class='right-container'>
+        <div id='orientCubeWrapper'></div>
+    </div>
     <div class='home-container'>
-        <span>
-            <div class='buttonIcon'>
-                <div id='goHome'><i class='fa fa-home'></i></div>
+        <div class="row mx-md-n5">
+            <div class="col px-md-1">
+                <div class='buttonIcon'>
+                    <div id='goHome'><i class='fa fa-home'></i></div>
+                </div>
             </div>
-            <div class='buttonIcon'>
-                <div id='saveHome'><i class='fa fa-clinic-medical'></i></div>
+            <div class="col px-md-1">
+                <div class='buttonIcon'>
+                    <div id='saveHome'><i class='fa fa-clinic-medical'></i></div>
+                </div>
             </div>
-            <div class='right-container'>
-                <div id='orientCubeWrapper'></div>
-            </div>
-        </span>
+        </div>
     </div>
 
     <script type="text/javascript" src='./js/doSurfaces.js'></script>
@@ -49,111 +54,93 @@
         const kepler    = globalThis['@youwol/kepler']
 
         const model = {
-            grid: false
+            grid: false,
+            bbox: true,
+            backgroundColor: '#aaaaaa'
         }
 
         const surfaceset = [
             {
-                url: ['/data/sandbox/mw.ts'],
-                show: false,
-                attr: 'cost',
-                lut: 'Insar',
+                url: '/data/streamlines/out.ts',
+                show: true,
+                attr: '',
+                lut: 'Blackbody',
                 duplicateLut: 1,
-                reverseLut: false,
+                opacity: 1,
                 surface: {
-                    show: false,
+                    show: true,
                     color: '#aaaaaa',
                     flat: false,
                     creaseAngle: 0,
-                    opacity: 1
+                    opacity: 1,
+                    min: -5,
+                    max: 5
                 },
                 wireframe: {
                     show: false,
                     color: '#000000'
-                },
-                iso: {
-                    show: true,
-                    showFill: true,
-                    showLines: true,
-                    flat: true,
-                    nb :   7,
-                    opacity: 1,
-                    // spacing: 1,
-                    // useMinMax: true,
-                    // min: -0.4,
-                    // max:  7,
                 }
             },
             {
-                url: [
-                    "/data/arch/santos/diapirs.ts",
-                ],
+                url: '/data/arch/wells/well1.ts',
                 show: false,
                 attr: '',
                 lut: 'Insar',
                 duplicateLut: 1,
-                name: {
-                    show: false,
-                    fontSize: 40,
-                    rect: false,
-                    translate: false
-                },
+                opacity: 1,
                 surface: {
                     show: true,
-                    color: '#aaa',
+                    color: '#ff0000',
                     flat: false,
                     creaseAngle: 0,
                     opacity: 1
                 },
                 wireframe: {
-                    show: false,
-                    color: '#000000'
-                },
-                iso: {
                     show: true,
-                    showFill: true,
-                    showLines: true,
-                    flat: true,
-                    nb: 20,
-                    // useMinMax: false,
-                    // min: -1e10,
-                    // max: 1e10,
+                    color: '#000000'
+                }
+            },
+            {
+                url: '/data/arch/wells/well1.ts',
+                show: false,
+                attr: '',
+                lut: 'Insar',
+                duplicateLut: 1,
+                opacity: 1,
+                translation: [100000, 0, 0],
+                surface: {
+                    show: true,
+                    color: '#0000ff',
+                    flat: false,
+                    creaseAngle: 0,
+                    opacity: 1
+                },
+                wireframe: {
+                    show: true,
+                    color: '#000000'
                 }
             }
         ]
         const plines = [
-        {
-                url: [
-                    '/data/arch/santos/test/large_faults_2022.pl',
-                    '/data/arch/santos/test/medium_faults_2022.pl',
-                    '/data/arch/santos/test/small_faults_2022.pl',
-                    '/data/arch/santos/test/very_small_faults_2022.pl',
+            {
+                url: [ 
+                    '/data/streamlines/out.pl'
                 ],
                 show: false,
-                useTube: true,
-                scale: 1,
-                tubeRadius: 30,
-                color: "#000"
+                width: .001,
+                attr: '',
+                color: "#000000"
             }
         ]
+
         const pointsets = [
             {
-                url: "/data/point-cloud/salon.xyz",
-                // url: "/data/arch/spanish-peak/domain.xyz",
-                // url: "/data/arch/galapagos-all/model2/dikes_georef/points.xyz/domain-theta-Rh.xyz",
-                // url: "/data/meca/kogan.xyz",
-                // url: "/data/sandbox/mw.xyz",
-                show: true,
-                attr: 'color',
-                lut: 'Insar',
-                reverseLut: false,
-                color: '#aaa',
-                sizeAttenuation: false,
+                url: "/data/pointset/wellpoint.xyz",
+                show: false,
+                attr: '',
+                color: "#0000ff",
                 size: 5,
-                // min: 0,
-                // max: 1,
-                // useMinMax: false,
-                // opacity: 0.5,
+                sizeAttenuation: false
             }
         ]
 

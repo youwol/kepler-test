@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Testing Kepler: Spiral</title>
+    <script src='/devs/workspace/packages/dataframe/dist/@youwol/dataframe.js'></script>
+    <script src='/devs/workspace/packages/math/dist/@youwol/math.js'></script>
+    <script src='/devs/workspace/packages/geometry/dist/@youwol/geometry.js'></script>
+    <script src='/devs/workspace/packages/io/dist/@youwol/io.js'></script>
+    <script src='/devs/workspace/packages/three-extra/node_modules/three/build/three.min.js'></script>
+    <script src='/devs/workspace/packages/three-extra/node_modules/three/examples/js/controls/TrackballControls.js'></script>
+    <script src='/devs/workspace/packages/three-extra/dist/@youwol/three-extra.js'></script>
+    <script src='/devs/workspace/packages/kepler/dist/@youwol/kepler.js'></script>    
+    <script src="https://kit.fontawesome.com/daa834e337.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="js/style.css">
+</head>
+<body>
+    <div class="loading" id="js-loader">
+        <div class="loader"></div>
+    </div>
+
+    <div class='right-container'>
+        <div id='orientCubeWrapper'></div>
+    </div>
+    <div class='home-container'>
+        <div class="row mx-md-n5">
+            <div class="col px-md-1">
+                <div class='buttonIcon'>
+                    <div id='goHome'><i class='fa fa-home'></i></div>
+                </div>
+            </div>
+            <div class="col px-md-1">
+                <div class='buttonIcon'>
+                    <div id='saveHome'><i class='fa fa-clinic-medical'></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="menu" style="position: absolute; opacity: 70%; margin-bottom:3px; top: 5px; left: 5px;">
+    <input id="upload" type="file" style="visibility:hidden" />
+
+    <script src="https://cdn.jsdelivr.net/npm/lil-gui@0.17"></script>
+
+    <script type="text/javascript" src='./js/doSurfaces.js'></script>
+    <script type="text/javascript" src='./js/doLines.js'></script>
+    <script type="text/javascript" src='./js/doPointset.js'></script>
+    <script type="text/javascript" src='./js/postInit.js'></script>
+    <script type="text/javascript" src='./js/utils.js'></script>
+    <script type="text/javascript" src='./js/init.js'></script>
+
+    <script>
+        const three     = globalThis['THREE']        
+        const dataframe = globalThis['@youwol/dataframe']
+        const math      = globalThis['@youwol/math']
+        const geom      = globalThis['@youwol/geometry']
+        const io        = globalThis['@youwol/io']
+        const extra     = globalThis['@youwol/three-extra']
+        const kepler    = globalThis['@youwol/kepler']
+
+        const colorTables = [
+    "Cooltowarm",
+    "Blackbody",
+    "Grayscale",
+    "Insar",
+    "InsarBanded",
+    "Rainbow",
+    "Igeoss",
+    "Stress",
+    "Blue_White_Red",
+    "Blue_Green_Red",
+    "Spectrum",
+    "Default",
+    "Banded",
+    "Accent",
+    "Blues",
+    "BrBG",
+    "BuGn",
+    "BuPu",
+    "CMRmap",
+    "Dark2",
+    "GnBu",
+    "Greens",
+    "Greys",
+    "OrRd",
+    "Oranges",
+    "PRGn",
+    "Paired",
+    "Pastel1",
+    "Pastel2",
+    "PiYG",
+    "PuBu",
+    "PuBuGn",
+    "PuOr",
+    "PuRd",
+    "Purples",
+    "RdBu",
+    "RdGy",
+    "RdPu",
+    "RdYlBu",
+    "RdYlGn",
+    "Reds",
+    "Set1",
+    "Set2",
+    "Set3",
+    "Spectral",
+    "Wistia",
+    "YlGn",
+    "YlGnBu",
+    "YlOrBr",
+    "YlOrRd",
+    "afmhot",
+    "autumn",
+    "binary",
+    "bone",
+    "brg",
+    "bwr",
+    "cividis",
+    "cool",
+    "coolwarm",
+    "copper",
+    "cubehelix",
+    "flag",
+    "gist_earth",
+    "gist_gray",
+    "gist_heat",
+    "gist_ncar",
+    "gist_rainbow",
+    "gist_stern",
+    "gist_yarg",
+    "gnuplot",
+    "gnuplot2",
+    "gray",
+    "hot",
+    "hsv",
+    "inferno",
+    "jet",
+    "magma",
+    "nipy_spectral",
+    "ocean",
+    "pink",
+    "plasma",
+    "prism",
+    "rainbow",
+    "seismic",
+    "spring",
+    "summer",
+    "tab10",
+    "tab20",
+    "tab20b",
+    "tab20c",
+    "terrain",
+    "turbo",
+    "twilight",
+    "twilight_shifted",
+    "viridis",
+    "winter"
+]
+
+        // =========================================================
+        const upload = document.getElementById('upload')
+        upload.onchange = () => {
+            upload.files[0].arrayBuffer().then( arrayBuffer => {
+                console.log( new TextDecoder().decode(arrayBuffer) )
+            })
+        }
+
+        const GUI = lil.GUI
+        const parent = document.getElementById('menu');
+        const gui = new GUI({container: parent})
+        const myObject = {
+            myBoolean: true,
+            upload: function() {
+                document.getElementById('upload').click()
+                
+            },
+            myString: "lil-gui",
+            myNumber: 1,
+            colorTables: 'Insar'
+        };
+
+        gui.add( myObject, 'myBoolean' );  // Checkbox
+        gui.add( myObject, 'upload' ).name('Load data') // Button
+        gui.add( myObject, 'myString' );   // Text Field
+        gui.add( myObject, 'myNumber' );   // Number Field
+
+        // Add sliders to number fields by passing min and max
+        gui.add( myObject, 'myNumber', 0, 1 );
+        gui.add( myObject, 'myNumber', 0, 100, 2 ); // snap to even numbers
+
+        // Create dropdowns by passing an array or object of named values
+        gui.add( myObject, 'colorTables', colorTables ).name('Color tables')
+        gui.add( myObject, 'myNumber', { Label1: 0, Label2: 1, Label3: 2 } );
+
+        // Chainable methods
+        // gui.add( myObject, 'myProperty' )
+        //     .name( 'Custom Name' )
+        //     .onChange( value => {
+        //         console.log( value );
+        //     } );
+
+        // Create color pickers for multiple color formats
+        const colorFormats = {
+            string: '#ffffff',
+            int: 0xffffff,
+            object: { r: 1, g: 1, b: 1 },
+            array: [ 1, 1, 1 ]
+        };
+
+        gui.addColor( colorFormats, 'string' );
+        // =========================================================
+
+        const model = {
+            grid: false
+        }
+
+        const surfaceset = []
+
+        const plines = [
+            {
+                url: [ 
+                    '/data/lines/spiral.pl'
+                ],
+                show: true,
+                width: .005,
+                attr: 'a',
+                opacity: 1,
+                lut: 'Igeoss',
+                color: "#ff0000",
+                dashed: false,
+                dashScale: 1
+            }
+        ]
+
+        const pointsets = [
+        ]
+
+        init()
+        load()
+        requestAnimationFrame( animate )
+
+    </script>
+</body>
+</html>
