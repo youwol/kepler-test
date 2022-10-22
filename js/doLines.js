@@ -21,10 +21,9 @@ function doLines(plines) {
     return promises
 }
 
-// ------------------------------------------
-
 function doPLine(plineInfo) {
     if (plineInfo.url === undefined) return []
+    if (Array.isArray(plineInfo.url) && plineInfo.url.length===0) return []
     if (Array.isArray(plineInfo.url)) {
         const promises = []
         plineInfo.url.forEach( url => {
@@ -46,13 +45,12 @@ function doPLine(plineInfo) {
             .then( buffer => {
                 if (! buffer) return undefined
 
-                // const scolor = randColor()
                 const filter = io.IOFactory.getFilter(url)
-
                 if (filter) {
                     const dfs = filter.decode(buffer, {shared: false, merge: true})
-
                     dfs.forEach( df => {
+                        lineDataframe.push(df)
+                        createGlLine(df, plineInfo)
 
                         if (plineInfo.show) {
 
@@ -103,5 +101,42 @@ function doPLine(plineInfo) {
                 }
             })
         return promise
+    }
+}
+
+function updateLines() {
+    lines.clear()
+    lineDataframe.forEach( df => createGlLine(df, plines) )
+}
+
+function createGlLine(df, plineInfo) {
+    const manager = new dataframe.Manager(df, [
+        new math.PositionDecomposer,       // x y z
+        new math.ComponentDecomposer,      // Ux Uy Uz Sxx Sxy Sz Syy Syz Szz
+        new math.VectorNormDecomposer,     // U
+        new math.EigenValuesDecomposer,    // S1 S2 S3
+        new math.EigenVectorsDecomposer,   // S1 S2 S3
+    ])
+
+    let skin = kepler.createLineset2({
+        position: df.series.positions,
+        parameters: {
+            width  : plineInfo.width,
+            color  : plineInfo.color,
+            opacity: plineInfo.opacity
+        }
+    })
+    lines.add( skin )
+
+    if (plineInfo.attr) {
+        const attrName = plineInfo.attr
+        const attr = manager.serie(1, attrName)
+        if (attr) {
+            kepler.paintAttribute(skin, attr, new kepler.PaintParameters({
+                atVertex  : true,
+                lut       : plineInfo.lut!==undefined?plineInfo.lut: 'insar',
+                reverseLut: plineInfo.reverseLut!==undefined?plineInfo.reverseLut: false
+            }))
+        }
     }
 }

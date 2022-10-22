@@ -1,12 +1,9 @@
 # @youwol/kepler-test
 
 
-## Description
-Testing `@youwol/kepler`
-
 ## Install
 ```shell
-yarn serve
+yarn
 ```
 
 ## Usage
