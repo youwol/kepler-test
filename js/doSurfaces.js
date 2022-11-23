@@ -193,24 +193,27 @@ function doSurface(surfaceInfo) {
                         position = position.map(v => [v[0] + x, v[1] + y, v[2] + z])
                     }
 
-                    const manager = new dataframe.Manager(df, [
-                        new math.PositionDecomposer,       // x y z
-                        new math.ComponentDecomposer,      // Ux Uy Uz Sxx Sxy Sz Syy Syz Szz
-                        new math.VectorNormDecomposer,     // U
-                        new math.EigenValuesDecomposer,    // S1 S2 S3
-                        new math.EigenVectorsDecomposer,    // S1 S2 S3
-                        new geom.NormalsToNodeDecomposer,
-                        new RDecomposer,
-                        new StressVerticallity,
-                        new MCSS(0.6),
-                        // new UDecomposer,
-                        new geom.TriangleToNodeDecomposer({
-                            positions: position,
-                            indices,
-                            decomposer: new math.AreaDecomposer
-                        }),
-                        new geom.CurvatureDecomposer({positions: position, indices})
-                    ])
+                    const manager = new dataframe.Manager(df, {
+                        decomposers: [
+                            new math.PositionDecomposer,       // x y z
+                            new math.ComponentDecomposer,      // Ux Uy Uz Sxx Sxy Sz Syy Syz Szz
+                            new math.VectorNormDecomposer,     // U
+                            new math.EigenValuesDecomposer,    // S1 S2 S3
+                            new math.EigenVectorsDecomposer,    // S1 S2 S3
+                            new geom.NormalsToNodeDecomposer,
+                            new RDecomposer,
+                            new StressVerticallity,
+                            new MCSS(0.6),
+                            // new UDecomposer,
+                            new geom.TriangleToNodeDecomposer({
+                                positions: position,
+                                indices,
+                                decomposer: new math.AreaDecomposer
+                            }),
+                            new geom.CurvatureDecomposer({positions: position, indices})
+                        ],
+                        dimension: 3
+                    })
 
                     // console.log(manager.names(1))
 
@@ -498,54 +501,44 @@ function doSurface(surfaceInfo) {
 
                     if (attr && surfaceInfo.iso) {
                         const minmax = dataframe.array.minMax(attr.array)
-                        //let isos = kepler.generateIsos(minmax[0], minmax[1], 20)
-                        //isos = [-0.2, 0, 0.2]
-                        // let isos = kepler.generateIsos(minmax[0], minmax[1], surfaceInfo.iso.nb)
-                        //let isos = kepler.generateIsosBySpacing(minmax[0], minmax[1], surfaceInfo.iso.spacing)
-                        let iso = undefined
-                        if (surfaceInfo.iso.useMinMax != undefined && surfaceInfo.iso.useMinMax === true) {
-                            if (surfaceInfo.iso.spacing) {
-                                isos = kepler.generateIsosBySpacing(surfaceInfo.iso.min, surfaceInfo.iso.max, surfaceInfo.iso.spacing)
-                            }
-                            else if (surfaceInfo.iso.nb) {
-                                isos = kepler.generateIsos(surfaceInfo.iso.min, surfaceInfo.iso.max, surfaceInfo.iso.nb)
-                            }
-                            else if (surfaceInfo.iso.list) {
-                                isos = kepler.generateIsos(surfaceInfo.iso.min, surfaceInfo.iso.max, surfaceInfo.iso.list)
-                            }
-                        }
-                        else {
-                            if (surfaceInfo.iso.spacing) {
-                                isos = kepler.generateIsosBySpacing(minmax[0], minmax[1], surfaceInfo.iso.spacing)
-                            }
-                            else if (surfaceInfo.iso.nb) {
-                                isos = kepler.generateIsos(minmax[0], minmax[1], surfaceInfo.iso.nb)
-                            }
-                            else if (surfaceInfo.iso.list) {
-                                isos = kepler.generateIsos(minmax[0], minmax[1], surfaceInfo.iso.list)
-                            }
+
+                        let min = surfaceInfo.iso.min!==undefined?surfaceInfo.iso.min : minmax[0]
+                        let max = surfaceInfo.iso.max!==undefined?surfaceInfo.iso.max : minmax[1]
+
+                        if (surfaceInfo.iso.useMinMax === false) {
+                            min = minmax[0]
+                            max = minmax[1]
                         }
 
+                        let iso = undefined    
+                        if (surfaceInfo.iso.spacing) {
+                            isos = kepler.generateIsosBySpacing(min, max, surfaceInfo.iso.spacing)
+                        }
+                        else if (surfaceInfo.iso.nb) {
+                            isos = kepler.generateIsos(min, max, surfaceInfo.iso.nb)
+                        }
+                        else if (surfaceInfo.iso.list) {
+                            isos = kepler.generateIsos(min, max, surfaceInfo.iso.list)
+                        }
 
                         if (surfaceInfo.iso.show && isos) {
                             const iso = kepler.createIsoContours(
                                 surface,
                                 attr, {
                                 parameters: new kepler.IsoContoursParameters({
-                                    color: '#ffffff',
-                                    lineColor: '#000000',
-                                    isoList: isos,
-                                    filled: surfaceInfo.iso.showFill,
-                                    lined: surfaceInfo.iso.showLines,
-                                    opacity: surfaceInfo.iso.opacity,
-                                    lut: surfaceInfo.lut,
-                                    reverseLut: surfaceInfo.reverseLut,
+                                    color       : '#ffffff',
+                                    lineColor   : '#000000',
+                                    isoList     : isos,
+                                    filled      : surfaceInfo.iso.showFill,
+                                    lined       : surfaceInfo.iso.showLines,
+                                    opacity     : surfaceInfo.iso.opacity,
+                                    lut         : surfaceInfo.lut,
+                                    reverseLut  : surfaceInfo.reverseLut,
                                     duplicateLut: surfaceInfo.duplicateLut,
-                                    min: surfaceInfo.iso.min,
-                                    max: surfaceInfo.iso.max
+                                    min,
+                                    max
                                 })
-                            }
-                            )
+                            })
                             group.add(iso)
 
                             // const lut = kepler.createLut(surfaceInfo.lut, 64)

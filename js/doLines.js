@@ -61,13 +61,16 @@ function doPLine(plineInfo) {
                             }
                             // console.log('min-max position pointset:', math.minMax(position) )
 
-                            const manager = new dataframe.Manager(df, [
-                                new math.PositionDecomposer,       // x y z
-                                new math.ComponentDecomposer,      // Ux Uy Uz Sxx Sxy Sz Syy Syz Szz
-                                new math.VectorNormDecomposer,     // U
-                                new math.EigenValuesDecomposer,    // S1 S2 S3
-                                new math.EigenVectorsDecomposer,   // S1 S2 S3
-                            ])
+                            const manager = new dataframe.Manager(df, {
+                                decomposers: [
+                                    new math.PositionDecomposer,       // x y z
+                                    new math.ComponentDecomposer,      // Ux Uy Uz Sxx Sxy Sz Syy Syz Szz
+                                    new math.VectorNormDecomposer,     // U
+                                    new math.EigenValuesDecomposer,    // S1 S2 S3
+                                    new math.EigenVectorsDecomposer,   // S1 S2 S3
+                                ],
+                                dimension: 3
+                            })
 
                             let skin = kepler.createLineset2({
                                 position: df.series.positions,
@@ -110,13 +113,16 @@ function updateLines() {
 }
 
 function createGlLine(df, plineInfo) {
-    const manager = new dataframe.Manager(df, [
-        new math.PositionDecomposer,       // x y z
-        new math.ComponentDecomposer,      // Ux Uy Uz Sxx Sxy Sz Syy Syz Szz
-        new math.VectorNormDecomposer,     // U
-        new math.EigenValuesDecomposer,    // S1 S2 S3
-        new math.EigenVectorsDecomposer,   // S1 S2 S3
-    ])
+    const manager = new dataframe.Manager(df, {
+        decomposers: [
+            new math.PositionDecomposer,       // x y z
+            new math.ComponentDecomposer,      // Ux Uy Uz Sxx Sxy Sz Syy Syz Szz
+            new math.VectorNormDecomposer,     // U
+            new math.EigenValuesDecomposer,    // S1 S2 S3
+            new math.EigenVectorsDecomposer,   // S1 S2 S3
+        ],
+        dimension: 3
+    })
 
     let skin = kepler.createLineset2({
         position: df.series.positions,

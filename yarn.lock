@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@youwol/dataframe@^0.0.35":
-  version "0.0.35"
-  resolved "https://registry.yarnpkg.com/@youwol/dataframe/-/dataframe-0.0.35.tgz#2500da0da18582178723d4d37f4ed5f07f33944a"
-  integrity sha512-S5Iu7p1HER0+YURL4Y04PZyJB0tFtBIipCE6kanteQuwvpJenxauVdWBSaX+i3bZOzht9QPiVeCrr34UrAB3Xg==
+"@youwol/dataframe@^0.0.37":
+  version "0.0.37"
+  resolved "https://registry.yarnpkg.com/@youwol/dataframe/-/dataframe-0.0.37.tgz#4bf388c231d335beb2d2628684be10283110d5f7"
+  integrity sha512-FrjK6zeAyN+JsXsCv3dfpDciJw4GHaOtYoFyoQUOZd8oV2GASZ5x3N2oi2l7O0lharXX+dcaMina97yOaEDXjA==
 
 "@youwol/geometry@^0.0.21":
   version "0.0.21"
@@ -24,27 +24,27 @@
   dependencies:
     "@youwol/io" "0.0.20"
 
-"@youwol/kepler@^0.0.10-wip":
-  version "0.0.10-wip"
-  resolved "https://registry.yarnpkg.com/@youwol/kepler/-/kepler-0.0.10-wip.tgz#f600d9f4583641b7a1b1f23976872f6befcf25d0"
-  integrity sha512-s0FbO1jz8p4Z8hzqGoPTB2VXm+TcMhVxCIDz/ZrZ6Az2Rgk3UCfhfn/GRDIToFeyVE+lsniI26t7fuUViC3k4g==
+"@youwol/kepler@^0.0.13":
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/@youwol/kepler/-/kepler-0.0.13.tgz#d5dff72f2f587b84b1022b87ba0f051e77b4a492"
+  integrity sha512-kb0fq3Dltl70Jzrg8rL747OAmf6FH+zPr5yO7YI5wJEEsVJXLrxIuVP6nooQpSBFjVl/sf4z6WdpzqIUOVHZeg==
 
-"@youwol/math@^0.0.21":
-  version "0.0.21"
-  resolved "https://registry.yarnpkg.com/@youwol/math/-/math-0.0.21.tgz#573cbaebfc75944e4d89a3340bcddc6d827752eb"
-  integrity sha512-ZCB1X89DTqF7P9zNy3Gn1kkbw5D81d0+XZst8FdwKrqMLLYa3Y6V3Y57Ybhk5VqdStT7+VijM81dsEEmKIXwpg==
+"@youwol/math@^0.0.22":
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/@youwol/math/-/math-0.0.22.tgz#4b5bbd49d3f4d5e132b2b0f975713ae42cba5b51"
+  integrity sha512-YNBACiHzCLhICEc6vpRV0YoZlmLiOfSZTeUVr9yQVB5EH99iP8fnmGySzjXIaQAQvB1CuKNf3xnYh2Sk7XZp6Q==
 
-"@youwol/three-extra@^0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@youwol/three-extra/-/three-extra-0.0.9.tgz#9c202170c2881ecbb5931a371496c3bf8d22377d"
-  integrity sha512-R1MbayFQAF/qZzfwss9mfS+3i7lwMoGt2382Dj3tY0sgzTvLPjsrz/9DHdhESP5B985TsIrPXeBzUyDni9kP+Q==
+"@youwol/three-extra@^0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@youwol/three-extra/-/three-extra-0.0.10.tgz#0cffdce83564a5da71f2b7bab0fee22fb3c13415"
+  integrity sha512-Z4KsJUzRVwW0TfyXtQcTXOZK97YHOCBl4LIOtLY8GqglPA0AzlDMwHEXiHbdTeoxqITrrRZkqWJLssXLubpz8g==
 
 three-trackballcontrols@^0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/three-trackballcontrols/-/three-trackballcontrols-0.9.0.tgz#2c8be3627f50644d6dd60c10d23edd7fbfeffadd"
   integrity sha512-Z6HmIJnP70r5uONvcPCdLEF0SsG1kbGzNb7qQYj3c7b6v2E3XTlbNpZsgTjt36oKm0Z2tU11D6EbW4i8KIHuqA==
 
-three@^0.128.0:
-  version "0.128.0"
-  resolved "https://registry.yarnpkg.com/three/-/three-0.128.0.tgz#884dacca6a330e45600a09ec5439283f50b76aa6"
-  integrity sha512-i0ap/E+OaSfzw7bD1TtYnPo3VEplkl70WX5fZqZnfZsE3k3aSFudqrrC9ldFZfYFkn1zwDmBcdGfiIm/hnbyZA==
+three@^0.146.0:
+  version "0.146.0"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.146.0.tgz#fd80f0d128ab4bb821a02191ae241e4e6326f17a"
+  integrity sha512-1lvNfLezN6OJ9NaFAhfX4sm5e9YCzHtaRgZ1+B4C+Hv6TibRMsuBAM5/wVKzxjpYIlMymvgsHEFrrigEfXnb2A==
