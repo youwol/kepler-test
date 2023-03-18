@@ -72,16 +72,31 @@ function doPLine(plineInfo) {
                                 dimension: 3
                             })
 
-                            let skin = kepler.createLineset2({
-                                position: df.series.positions,
-                                parameters: {
-                                    width: plineInfo.width?plineInfo.width:1,
-                                    color: plineInfo.color,
-                                    opacity   : plineInfo.opacity  !==undefined ? plineInfo.opacity   : 1,
-                                    dashed    : plineInfo.dashed   !==undefined ? plineInfo.dashed    : false,
-                                    dashScale : plineInfo.dashScale!==undefined ? plineInfo.dashScale : 0.1
-                                }
-                            })
+                            let skin = undefined
+                            if (plineInfo.useTube !== undefined && plineInfo.useTube) {
+                                skin = kepler.createLineset2({
+                                    position: df.series.positions,
+                                    parameters: {
+                                        width: plineInfo.width?plineInfo.width:1,
+                                        color: plineInfo.color,
+                                        opacity   : plineInfo.opacity  !==undefined ? plineInfo.opacity   : 1,
+                                        dashed    : plineInfo.dashed   !==undefined ? plineInfo.dashed    : false,
+                                        dashScale : plineInfo.dashScale!==undefined ? plineInfo.dashScale : 0.1
+                                    }
+                                })
+                            }
+                            else {
+                                skin = kepler.createLineset({
+                                    position: df.series.positions,
+                                    parameters: {
+                                        lineWidth : plineInfo.width?plineInfo.width:1,
+                                        color     : plineInfo.color,
+                                        opacity   : plineInfo.opacity  !==undefined ? plineInfo.opacity   : 1,
+                                        dashed    : plineInfo.dashed   !==undefined ? plineInfo.dashed    : false,
+                                        dashScale : plineInfo.dashScale!==undefined ? plineInfo.dashScale : 0.1
+                                    }
+                                })
+                            }
                             group.add( skin )
 
                             if (plineInfo.attr) {

@@ -400,12 +400,26 @@ function doSurface(surfaceInfo) {
                                         array: dataframe.createTyped(Float32Array, line.series.positions.array, false),
                                         itemSize: 3
                                     })
-                                    g.add( kepler.createLineset({
-                                        position: pos,
-                                        parameters: new kepler.LinesetParameters({
-                                            color: '#000'
-                                        })
-                                    }) )
+                                    if (surfaceInfo.streamlines.useTube) {
+                                        g.add( kepler.createLineset2({
+                                            position: pos,
+                                            parameters: {
+                                                width: surfaceInfo.streamlines.width,
+                                                color: surfaceInfo.streamlines.color,
+                                                opacity   : 1,
+                                                dashed    : false,
+                                                dashScale : 0.1
+                                            }
+                                        }) )
+                                    }
+                                    else {
+                                        g.add( kepler.createLineset({
+                                            position: pos,
+                                            parameters: new kepler.LinesetParameters({
+                                                color: surfaceInfo.streamlines.color
+                                            })
+                                        }) )
+                                    }
                                 })
                                 if (surfaceInfo.streamlines.translate) {
                                     g.translateX(surfaceInfo.streamlines.translate[0])
@@ -474,7 +488,7 @@ function doSurface(surfaceInfo) {
                     }
                     if (surfaceInfo.bands !== undefined && Array.isArray(surfaceInfo.bands)) {
                         surfaceInfo.bands.forEach( sband => {
-                            if (manager.contains(1, sband.attr)) {
+                            if (sband.show && manager.contains(1, sband.attr)) {
                                 const attr = manager.serie(1, sband.attr)
                                 console.log(sband.attr, math.minMax(attr))
                                 const band = kepler.createBand(surface, attr, {

@@ -75,13 +75,6 @@
     <select name="FOV" id="fov" style="position: absolute; opacity: 70%; margin-bottom:3px; top: 110px; left: 5px;" onchange="changeFOV(this.selectedIndex)">
         <option value="Perspective" selected>Perspective</option>
         <option value="Orthographic">Orthographic</option>
-        <!-- <option value="100">100</option>
-        <option value="70" selected>70</option>
-        <option value="30">30</option>
-        <option value="10">10</option>
-        <option value="5">5</option>
-        <option value="2">2</option>
-        <option value="1">1</option> -->
     </select>
     
     <!-- PerspectiveCamera -->
@@ -124,28 +117,12 @@
             load()
         }
 
-        // function changeFOV(id) {
-        //     let itemList = document.getElementById("fov")
-        //     let collection = itemList.selectedOptions
-        //     if (collection[0].label === 'Perspective') {
-        //         camera.fov = 45
-        //     }
-        //     else {
-        //         camera.fov = 1
-        //     }
-        //     // const fov = parseFloat(collection[0].label)
-        //     // camera.fov = fov
-        //     camera.updateProjectionMatrix()
-        //     extra.fitScene({scene, camera, controls})
-        //     // extra.zoomToModel({scene, camera, controls, duration:300})
-        // }
-
         const surfaceset = [
             {
                 url: ["/data/arch/santos/test/forward-grid-superposition.ts"],
-                // url: ["/data/arch/santos/test/forward-grid.ts"],
+                // url: ["/data/arch/santos/test/forward-simulations-grid.ts"],
                 show: true,
-                attr: 'MCSS',
+                attr: '',
                 lut: 'Insar',
                 duplicateLut: 1,
                 reverseLut: false,
@@ -161,7 +138,7 @@
                 },
                 surface: {
                     show: false,
-                    color: '#aaa',
+                    color: '#aaaaaa',
                     flat: false,
                     creaseAngle: 0,
                     opacity: 1
@@ -173,18 +150,14 @@
                     flat: false,
                     // list: new Array(20).fill(0).map( (_,i) => i*0.05/20), //[0, 0.01, 0.02, 0.03, 0.04, 0.05]
                     nb: 20,
-                    // spacing: 0.1,
-                    // useMinMax: true,
-                    // min: 0,
-                    // max: 3.5,
                 },
                 streamlines: {
-                    show: false,
+                    show: true,
                     translate: [0,0,10],
                     attr: 'S2',
                     color: '#ff0000',
                     useTube: true,
-                    tubeRadius: 30,
+                    width: 0.001,
                     maximumPointsPerLine: 50,
                     dSep: 0.1,
                     timeStep: 0.05,
@@ -218,33 +191,33 @@
                     circle: true,
                     borders: true,
                     borderColor: "#000000",
-                    type: kepler.FractureType.DYKE
+                    type: kepler.FractureType.FAULT
                 },
                 bands: [
                     {
                         show: false,
                         attr: 'Svdir',
-                        from: 0,
-                        to  : 1,
-                        color: '#0000FF',
+                        from: 0.4,
+                        to  : 0.5,
+                        color: '#FF00FF',
                         translate: [0,0,-10],
                         scale: 1
                     },
                     {
                         show: false,
-                        attr: 'Svdir',
-                        from: 1,
-                        to  : 2,
+                        attr: 'R',
+                        from: 0.8,
+                        to  : 0.9,
                         color: '#00FF00',
                         translate: [0,0,-10],
                         scale: 1
                     },
                     {
-                        show: false,
-                        attr: 'Svdir',
-                        from: 2,
-                        to  : 3,
-                        color: '#FF0000',
+                        show: true,
+                        attr: 'R',
+                        from: 0.95,
+                        to  : 1,
+                        color: '#0000FF',
                         translate: [0,0,-10],
                         scale: 1
                     }
@@ -328,7 +301,7 @@
                 url: [
                     "/data/arch/santos/test/obs_neutral_points.ts",
                 ],
-                show: false,
+                show: true,
                 attr: '',
                 lut: 'Insar',
                 duplicateLut: 1,
@@ -356,11 +329,12 @@
                     '/data/arch/santos/test/small_faults_2022.pl',
                     '/data/arch/santos/test/very_small_faults_2022.pl',
                 ],
-                show: false,
+                show: true,
+                width: 0.002,
                 useTube: true,
-                scale: 1,
-                tubeRadius: 30,
-                color: "#000"
+                scale: .0001,
+                tubeRadius: .00003,
+                color: "#000000"
             }
         ]
 

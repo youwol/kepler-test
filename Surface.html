@@ -14,6 +14,8 @@
     <script src='/devs/workspace/packages/kepler/dist/@youwol/kepler.js'></script>
     <script src='/devs/workspace/packages/three-extra/dist/@youwol/three-extra.js'></script>
     <script src="https://kit.fontawesome.com/daa834e337.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="js/style.css">
 </head>
 <body>
@@ -33,8 +35,14 @@
             </div>
         </span>
     </div>
+
     <input id="btnSVGExport" type="button" value="Export SVG" onclick="btnSVGExport()" style="position: absolute; opacity: 40%; margin-bottom:3px">
     <input id="btnScreenshot" type="button" value="Screenshot" onclick="takeScreenshot()" style="position: absolute; opacity: 40%; margin-bottom:3px; top: 25px">
+
+    <select name="FOV" id="fov" style="position: absolute; opacity: 70%; margin-bottom:3px; top: 60px; left: 5px;" onchange="changeFOV(this.selectedIndex)">
+        <option value="Perspective" selected>Perspective</option>
+        <option value="Orthographic">Orthographic</option>
+    </select>
 
     <script type="text/javascript" src='./js/doSurfaces.js'></script>
     <script type="text/javascript" src='./js/doLines.js'></script>
@@ -54,8 +62,8 @@
 
         const model = {
             grid: false,
-            bbox: true,
-            backgroundColor: '#aaa'
+            bbox: false,
+            backgroundColor: '#fff'
         }
 
         const surfaceset = [
@@ -74,34 +82,40 @@
                 // url: '/data/arch/spanish-peak/domain-empty.ts',
                 // url: '/data/arch/galapagos-all/model2/domain-0.ts',
                 // url: ['/data/mesh/simple.ts', '/data/mesh/surface-relax.ts'],
-                url: ['/data/mesh/pts.ts'],
+                // url: ['/data/mesh/pts.ts'],
                 // url: ['/data/mesh/grid_for_streamlines-R.ts'],
                 // url: ['/data/arch/sphere/half-space/result_arch_grid.gcd'],
                 // url: ['/data/arch/fernandina/result_arch_grid.gcd'],
+
+                // url: ['/devs/workspace/packages/consulting/models/Tagoil/out/phase2/domain.ts'],
+                url: ['/data/mesh/stress-ratio.ts'],
+                // url: ['/devs/workspace/packages/consulting/models/Tagoil/out/phase2/result-strike-slip/simulations-3_Abu_Roash_F_50.ts'],
+                // url: ['/devs/workspace/packages/consulting/models/Tagoil/out/phase2/result-strike-slip/forward-Abu_Roash_ALL_faults_400_extended_remeshed.ts'],
+
                 show: true,
-                attr: 'z',
-                lut: 'Insar',
+                attr: 'yy',
+                lut: 'Igeoss',
                 duplicateLut: 1,
                 reverseLut: false,
-                opacity: 0.5,
+                opacity: 1,
                 surface: {
                     show: false,
                     color: '#aaaaaa',
                     flat: false,
                     creaseAngle: 0,
-                    opacity: 0.5
+                    opacity: 1
                 },
                 iso: {
                     show: true,
                     showFill: true,
-                    showLines: false,
+                    showLines: true,
                     flat: true,
                     nb :   20,
-                    opacity: 0.7,
+                    opacity: 1,
                     // spacing: 1,
                     // useMinMax: true,
-                    // min: -0.4,
-                    // max:  7,
+                    // min: 0,
+                    // max: 1,
                 },
                 streamlines: {
                     show: false,
@@ -139,7 +153,7 @@
                     color: "#000000"
                 },
                 wireframe: {
-                    show: true,
+                    show: false,
                     color: '#000000'
                 },
                 failure: {
@@ -158,11 +172,11 @@
         const plines = [
             {
                 url: [
-                    '/data/vinci/pl/horizontal.pl',
+                    '/devs/workspace/packages/consulting/models/domain-bounds.pl'
                 ],
                 show: false,
-                useTube: true,
-                tubeRadius: 0.1,
+                useTube: false,
+                width: 0.001,
                 color: "#000000"
             }
         ]

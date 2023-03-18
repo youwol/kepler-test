@@ -54,7 +54,7 @@
 
         const surfaceset = [
             {
-                url: ['/data/sandbox/mw.ts'],
+                url: [],
                 show: false,
                 attr: 'cost',
                 lut: 'Insar',
@@ -85,9 +85,7 @@
                 }
             },
             {
-                url: [
-                    "/data/arch/santos/diapirs.ts",
-                ],
+                url: [],
                 show: false,
                 attr: '',
                 lut: 'Insar',
@@ -123,12 +121,7 @@
         ]
         const plines = [
         {
-                url: [
-                    '/data/arch/santos/test/large_faults_2022.pl',
-                    '/data/arch/santos/test/medium_faults_2022.pl',
-                    '/data/arch/santos/test/small_faults_2022.pl',
-                    '/data/arch/santos/test/very_small_faults_2022.pl',
-                ],
+                url: [],
                 show: false,
                 useTube: true,
                 scale: 1,
@@ -138,12 +131,7 @@
         ]
         const pointsets = [
             {
-                // url: "/data/point-cloud/salle.xyz",
-                url: "/data/point-cloud/salon.xyz",
-                // url: "/data/arch/spanish-peak/domain.xyz",
-                // url: "/data/arch/galapagos-all/model2/dikes_georef/points.xyz/domain-theta-Rh.xyz",
-                // url: "/data/meca/kogan.xyz",
-                // url: "/data/sandbox/mw.xyz",
+                url: "/data/pointset/stress-ratio.xyz",
                 show: true,
                 attr: 'color',
                 lut: 'Insar',
@@ -151,6 +139,7 @@
                 color: '#aaa',
                 sizeAttenuation: false,
                 size: 5,
+                attr: "xy",
                 // min: 0,
                 // max: 1,
                 // useMinMax: false,
